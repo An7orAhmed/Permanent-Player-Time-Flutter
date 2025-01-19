@@ -19,7 +19,7 @@ class HomeController extends GetxController {
   // variables
   List<int> adjust = [];
 
-  Future<void> initGoogleSheet() async {
+  Future<void> _initGoogleSheet() async {
     String jsonFile = await rootBundle.loadString(_credentialFile);
     final serviceAccountCredentials = ServiceAccountCredentials.fromJson(json.decode(jsonFile));
     const scopes = [SheetsApi.spreadsheetsReadonlyScope];
@@ -31,7 +31,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> getDistricts() async {
-    await initGoogleSheet();
+    await _initGoogleSheet();
+
     if (spreadsheets == null) return;
     final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A1:A");
     if (data.values != null) {
@@ -55,6 +56,10 @@ class HomeController extends GetxController {
         duration: Duration(seconds: 2),
       ));
       return;
+    }
+
+    if(selectedDistrict.value != "Dhaka") {
+      spreadsheets?.values.get(_spreadsheetId, "Adjust!A:K");
     }
   }
 }
