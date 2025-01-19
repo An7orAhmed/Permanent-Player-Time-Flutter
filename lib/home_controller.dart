@@ -6,7 +6,7 @@ import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
 class HomeController extends GetxController {
-  final _credentialFile = "assets/an7or-diary-f6c149a24b60.json";
+  final _credentialFile = "assets/an7or-diary-a33fc732b973.json";
   final _spreadsheetId = '1AP2OJyhpY7zQVr3h46k5Zq1GUXOcUuOSPTaeOpfNaQY';
   SpreadsheetsResource? spreadsheets;
 
