@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -12,6 +14,8 @@ class HomeController extends GetxController {
 
   // state
   var districts = <String>[].obs;
+  var selectedDistrict = ''.obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -42,6 +46,18 @@ class HomeController extends GetxController {
       }
       districts.removeAt(0);
       districts.insert(0, "Dhaka");
+    }
+  }
+
+  void generatePrayerTimes() {
+    if (selectedDistrict.isEmpty) {
+      Get.showSnackbar(GetSnackBar(
+        title: "Error",
+        message: "Please select district!",
+        icon: Icon(Icons.error, color: Colors.white),
+        backgroundColor: Colors.redAccent,
+      ));
+      return;
     }
   }
 }
