@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: SizedBox(
-          height: 201,
+          height: 244,
           width: 500,
           child: Card(
             color: Colors.white,
@@ -27,16 +27,21 @@ class HomePage extends StatelessWidget {
                     spacing: 20,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Permanent Prayer Time Generator",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          "Permanent Prayer Time",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
+                        subtitle: Text("24CXX EEPROM .bin file generator"),
+                        trailing: Image.asset("assets/ic.png"),
                       ),
                       Obx(
                         () => DropdownButtonFormField<String>(
+                          menuMaxHeight: 250,
                           decoration: InputDecoration(
                             labelText: "Select District",
                             border: OutlineInputBorder(
