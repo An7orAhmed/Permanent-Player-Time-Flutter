@@ -10,6 +10,9 @@ class HomeController extends GetxController {
   final _spreadsheetId = '1AP2OJyhpY7zQVr3h46k5Zq1GUXOcUuOSPTaeOpfNaQY';
   SpreadsheetsResource? spreadsheets;
 
+  // state
+  var districts = <String>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -25,17 +28,19 @@ class HomeController extends GetxController {
     final sheetsApi = SheetsApi(authClient);
 
     spreadsheets = sheetsApi.spreadsheets;
-    await testRead();
+    await getDistricts();
   }
 
-  Future<void> testRead() async {
+  Future<void> getDistricts() async {
     if (spreadsheets == null) return;
-    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A:K");
+    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A1:A63");
     if (data.values != null) {
-      print('Data from the Google Sheet: ');
+      districts.clear();
       for (var row in data.values!) {
-        print(row);
+        final district = row.first as String;
+        districts.add(district);
       }
+      districts.removeAt(0);
     }
   }
 }
