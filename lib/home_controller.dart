@@ -19,12 +19,6 @@ class HomeController extends GetxController {
   // variables
   List<int> adjust = [];
 
-  @override
-  void onInit() {
-    super.onInit();
-    initGoogleSheet();
-  }
-
   Future<void> initGoogleSheet() async {
     String jsonFile = await rootBundle.loadString(_credentialFile);
     final serviceAccountCredentials = ServiceAccountCredentials.fromJson(json.decode(jsonFile));
@@ -34,12 +28,12 @@ class HomeController extends GetxController {
     final sheetsApi = SheetsApi(authClient);
 
     spreadsheets = sheetsApi.spreadsheets;
-    await getDistricts();
   }
 
   Future<void> getDistricts() async {
+    await initGoogleSheet();
     if (spreadsheets == null) return;
-    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A");
+    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A1:A");
     if (data.values != null) {
       districts.clear();
       for (var row in data.values!) {
