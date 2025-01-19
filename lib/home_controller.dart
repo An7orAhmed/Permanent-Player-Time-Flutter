@@ -41,6 +41,7 @@ class HomeController extends GetxController {
         districts.add(district);
       }
       districts.removeAt(0);
+      districts.insert(0, "Dhaka");
     }
   }
 }
