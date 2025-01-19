@@ -10,9 +10,10 @@ class HomePage extends StatelessWidget {
     final homeCtx = Get.find<HomeController>();
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Center(
         child: SizedBox(
-          height: 244,
+          height: 256,
           width: 500,
           child: Card(
             color: Colors.white,
@@ -68,6 +69,11 @@ class HomePage extends StatelessWidget {
                           onPressed: () {
                             homeCtx.generatePrayerTimes();
                           },
+                          style: ButtonStyle(
+                            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 20, horizontal: 25)),
+                            backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
+                            foregroundColor: WidgetStatePropertyAll(Colors.white),
+                          ),
                           child: Text("Generate"),
                         ),
                       ),

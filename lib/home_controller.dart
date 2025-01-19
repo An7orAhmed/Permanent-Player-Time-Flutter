@@ -16,6 +16,9 @@ class HomeController extends GetxController {
   var selectedDistrict = ''.obs;
   var isLoading = false.obs;
 
+  // variables
+  List<int> adjust = [];
+
   @override
   void onInit() {
     super.onInit();
@@ -36,7 +39,7 @@ class HomeController extends GetxController {
 
   Future<void> getDistricts() async {
     if (spreadsheets == null) return;
-    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A1:A63");
+    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A");
     if (data.values != null) {
       districts.clear();
       for (var row in data.values!) {
@@ -55,6 +58,7 @@ class HomeController extends GetxController {
         message: "Please select district!",
         icon: Icon(Icons.error, color: Colors.white),
         backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
       ));
       return;
     }
