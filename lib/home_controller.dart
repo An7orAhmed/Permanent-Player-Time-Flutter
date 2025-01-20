@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,10 +78,10 @@ class HomeController extends GetxController {
         for (String timeStr in row as List<dynamic>) {
           int timeInt = int.tryParse(timeStr) ?? 0;
 
-          if (selectedDistrict.value != "Dhaka") {
+          if (selectedDistrict.value != "Dhaka" && timeInt > 0) {
             int hh = timeInt ~/ 100;
             int mm = timeInt % 100;
-            DateTime time = DateTime(2000, 1, 1, hh, mm);
+            DateTime time = DateTime(DateTime.now().year, 1, 1, hh, mm);
             time = time.add(Duration(minutes: _adjust[i]));
             timeInt = time.hour * 100 + time.minute;
           }
@@ -97,7 +100,49 @@ class HomeController extends GetxController {
     }
   }
 
+  void _generateAndDownloadBinFile() {
+    final offset = 500;
+    final totalSize = offset + (12 * 31 * 10 * 2);
+    final byteData = ByteData(totalSize);
+
+    for (var i = 0; i < offset; i++) {
+      byteData.setUint8(i, 0);
+    }
+
+    var writeIndex = offset;
+    for (var month in _months) {
+      for (var wakto in _waktos) {
+        final waqtList = _timeTable[month]![wakto]!;
+        for (var waqt in waqtList) {
+          byteData.setInt16(writeIndex, waqt, Endian.big);
+          writeIndex += 2;
+        }
+      }
+    }
+
+    final bytes = byteData.buffer.asUint8List();
+    final blob = html.Blob([bytes]);
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    html.AnchorElement(href: url)
+      ..target = 'blank'
+      ..download = 'PP_TIME_${DateTime.now().year}.bin'
+      ..click();
+
+    html.Url.revokeObjectUrl(url);
+  }
+
   Future<void> generatePrayerTimes() async {
+    if (isLoading.value) {
+      Get.showSnackbar(GetSnackBar(
+        title: "Error",
+        message: "Already in progress...",
+        icon: Icon(Icons.error, color: Colors.white),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ));
+      return;
+    }
+
     isLoading.value = true;
 
     statusMsg.value = 'Checking district...';
@@ -125,6 +170,9 @@ class HomeController extends GetxController {
       statusMsg.value = 'Getting $month data...';
       await _getTimeTableByMonth(month);
     }
+
+    statusMsg.value = 'Creating bin file...';
+    _generateAndDownloadBinFile();
 
     statusMsg.value = 'Completed.';
     isLoading.value = false;

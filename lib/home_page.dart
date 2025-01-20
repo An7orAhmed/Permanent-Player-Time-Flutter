@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
                                         ),
                                       )
                                     : Text(
-                                        "Note: for 12month 8KB EEPROM needed.",
+                                        "Note: for 12 months 8KB EEPROM needed.",
                                         style: TextStyle(
                                           fontStyle: FontStyle.italic,
                                           fontSize: 12,
