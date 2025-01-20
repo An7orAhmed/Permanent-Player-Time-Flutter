@@ -69,19 +69,39 @@ class HomePage extends StatelessWidget {
                               },
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                homeCtx.generatePrayerTimes();
-                              },
-                              style: ButtonStyle(
-                                padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 20, horizontal: 25)),
-                                backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
-                                foregroundColor: WidgetStatePropertyAll(Colors.white),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Obx(
+                                () => homeCtx.statusMsg.value != ''
+                                    ? Text(
+                                        homeCtx.statusMsg.value,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.blueAccent,
+                                        ),
+                                      )
+                                    : Text(
+                                        "Note: for 12month 8KB EEPROM needed.",
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                               ),
-                              child: Text("Generate"),
-                            ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  homeCtx.generatePrayerTimes();
+                                },
+                                style: ButtonStyle(
+                                  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 20, horizontal: 25)),
+                                  backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
+                                  foregroundColor: WidgetStatePropertyAll(Colors.white),
+                                ),
+                                child: Text("Generate"),
+                              ),
+                            ],
                           ),
                         ],
                       ),
