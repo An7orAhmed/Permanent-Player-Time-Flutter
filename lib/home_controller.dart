@@ -13,7 +13,7 @@ class HomeController extends GetxController {
   SpreadsheetsResource? spreadsheets;
 
   final _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  final _wakto = ["Sahari", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumu'ah", "Sunrise", "Sunset", "Iftar"];
+  final _waktos = ["Sahari", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumu'ah", "Sunrise", "Sunset", "Iftar"];
 
   // state
   var districts = <String>[].obs;
@@ -68,19 +68,29 @@ class HomeController extends GetxController {
     final data = await spreadsheets!.values.get(_spreadsheetId, "$month!B2:K");
     if (data.values != null) {
       _timeTable[month]?.clear();
-      for (List<dynamic> row in data.values!) {
+
+      for (int k = 0; k < 31; k++) {
+        final row = k < data.values!.length ? data.values![k] : List.filled(10, "0");
         int i = 0;
-        for (String timeStr in row) {
+        for (String timeStr in row as List<dynamic>) {
           int timeInt = int.tryParse(timeStr) ?? 0;
+
+          if (selectedDistrict.value != "Dhaka") {
+            int hh = timeInt ~/ 100;
+            int mm = timeInt % 100;
+            DateTime time = DateTime(2000, 1, 1, hh, mm);
+            time = time.add(Duration(minutes: _adjust[i]));
+            timeInt = time.hour * 100 + time.minute;
+          }
 
           if (_timeTable[month] == null) {
             _timeTable[month] = {};
           }
-          if (_timeTable[month]?[_wakto[i]] == null) {
-            _timeTable[month]?[_wakto[i]] = [];
+          if (_timeTable[month]?[_waktos[i]] == null) {
+            _timeTable[month]?[_waktos[i]] = [];
           }
 
-          _timeTable[month]?[_wakto[i]]?.add(timeInt);
+          _timeTable[month]?[_waktos[i]]?.add(timeInt);
           i++;
         }
       }
@@ -107,7 +117,7 @@ class HomeController extends GetxController {
     }
 
     if (selectedDistrict.value != "Dhaka") {
-      statusMsg.value = 'Getting district adjust data...';
+      statusMsg.value = 'Getting adjust data...';
       await _getAdjustRow();
     }
 
@@ -115,7 +125,6 @@ class HomeController extends GetxController {
       statusMsg.value = 'Getting $month data...';
       await _getTimeTableByMonth(month);
     }
-    print(_timeTable);
 
     statusMsg.value = 'Completed.';
     isLoading.value = false;
