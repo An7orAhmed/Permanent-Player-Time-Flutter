@@ -17,7 +17,7 @@ class HomeController extends GetxController {
   var isLoading = false.obs;
 
   // variables
-  List<int> adjust = [];
+  final List<int> _adjust = [];
 
   Future<void> _initGoogleSheet() async {
     String jsonFile = await rootBundle.loadString(_credentialFile);
@@ -33,7 +33,6 @@ class HomeController extends GetxController {
   Future<void> getDistricts() async {
     await _initGoogleSheet();
 
-    if (spreadsheets == null) return;
     final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A1:A");
     if (data.values != null) {
       districts.clear();
@@ -46,7 +45,20 @@ class HomeController extends GetxController {
     }
   }
 
-  void generatePrayerTimes() {
+  Future<void> getAdjustRow() async {
+    final data = await spreadsheets!.values.get(_spreadsheetId, "Adjust!A:K");
+    if (data.values != null) {
+      _adjust.clear();
+      for (List<dynamic> row in data.values!) {
+        if (row.first == selectedDistrict.value) {
+          _adjust.addAll(row.sublist(1).map((cell) => int.parse(cell)));
+          break;
+        }
+      }
+    }
+  }
+
+  Future<void> generatePrayerTimes() async {
     if (selectedDistrict.isEmpty) {
       Get.showSnackbar(GetSnackBar(
         title: "Error",
@@ -58,8 +70,6 @@ class HomeController extends GetxController {
       return;
     }
 
-    if(selectedDistrict.value != "Dhaka") {
-      spreadsheets?.values.get(_spreadsheetId, "Adjust!A:K");
-    }
+    if (selectedDistrict.value != "Dhaka") await getAdjustRow();
   }
 }
