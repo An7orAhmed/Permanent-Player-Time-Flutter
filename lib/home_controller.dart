@@ -94,7 +94,7 @@ class HomeController extends GetxController {
             _timeTable[month]?[_waktos[i]] = [];
           }
 
-          _timeTable[month]?[_waktos[i]]?.add(timeInt);
+          _timeTable[month]![_waktos[i]]!.add(timeInt);
           i++;
         }
       }
