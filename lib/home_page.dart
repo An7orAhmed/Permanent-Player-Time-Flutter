@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
       body: Center(
         child: SizedBox(
-          height: 256,
+          height: 308,
           width: 500,
           child: Card(
             color: Colors.white,
@@ -45,6 +45,10 @@ class HomePage extends StatelessWidget {
                             ),
                             subtitle: Text("24CXX EEPROM .bin file generator"),
                             trailing: Image.asset("assets/ic.png"),
+                          ),
+                          TextButton(
+                            onPressed: () => homeCtx.openGoogleSheet(),
+                            child: Text("Change Prayer Times"),
                           ),
                           Obx(
                             () => DropdownButtonFormField<String>(

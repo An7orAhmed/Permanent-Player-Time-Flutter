@@ -13,6 +13,7 @@ import 'package:googleapis_auth/auth_io.dart';
 class HomeController extends GetxController {
   final _credentialFile = "assets/an7or-diary-a33fc732b973.json";
   final _spreadsheetId = '1AP2OJyhpY7zQVr3h46k5Zq1GUXOcUuOSPTaeOpfNaQY';
+  final _googleSheetLink = "https://docs.google.com/spreadsheets/d/1AP2OJyhpY7zQVr3h46k5Zq1GUXOcUuOSPTaeOpfNaQY/edit";
   SpreadsheetsResource? spreadsheets;
 
   final _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -129,6 +130,10 @@ class HomeController extends GetxController {
       ..click();
 
     html.Url.revokeObjectUrl(url);
+  }
+
+  void openGoogleSheet() {
+    html.window.open(_googleSheetLink, '_blank');
   }
 
   Future<void> generatePrayerTimes() async {
