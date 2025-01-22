@@ -16,7 +16,7 @@ class HomeController extends GetxController {
   SpreadsheetsResource? spreadsheets;
 
   final _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  final _waktos = ["Sahari", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumu'ah", "Sunrise", "Sunset", "Iftar"];
+  final _waktos = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumu'ah", "Sunrise", "Sunset", "Sahari", "Iftar"];
 
   // state
   var districts = <String>[].obs;
